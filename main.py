@@ -11,7 +11,7 @@ from pydrive.drive import GoogleDrive
 load_dotenv()
 discord_key = os.getenv('Discord_BOT-TOKEN')
 discord_role_id = os.getenv('DiscordRoleID_EXEC')
-discord_channel_id = os.getenv('DiscordChannelID_EXEC')
+discord_channel_id = os.getenv('DiscordChannelID_execs')
 team_drive_id_UNSWPCsoc = os.getenv('ShareDriveFileID-UNSW_PCsoc')
 parent_folder_id_21T3 = os.getenv('SubFolderFileID-21T3')
 default_form_file_id = os.getenv('ARCFormFileID-Google_Forms')

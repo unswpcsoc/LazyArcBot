@@ -10,7 +10,8 @@ from pydrive.drive import GoogleDrive
 #all secret keys and google drive fileId are store in the '.env' file
 load_dotenv()
 discord_key = os.getenv('Discord_BOT-TOKEN')
-discord_role_id = os.getenv('DiscordRoleID_EXEC')
+discord_role_id_EXEC = os.getenv('DiscordRoleID_EXEC')
+discord_role_id_MOD = os.getenv('DiscordRoleID_MOD')
 discord_channel_id = os.getenv('DiscordChannelID_execs')
 team_drive_id_UNSWPCsoc = os.getenv('ShareDriveFileID-UNSW_PCsoc')
 parent_folder_id_21T3 = os.getenv('SubFolderFileID-21T3')
@@ -20,8 +21,9 @@ default_form_file_id = os.getenv('ARCFormFileID-Google_Forms')
 default_form_title = "Arc Online Event Attendance List"
 #sets the varible to whatever date is today
 folder_naming_scheme = datetime.date.today().strftime("%m-%d-%Y")
-#sets the text string from "env" file to a intager numbers
-discord_role_id = int(discord_role_id)
+#sets the text string from "env" file to a intager numbers so that EXEC and MOD roles will have access
+discord_role_id_EXEC = int(discord_role_id_EXEC)
+discord_role_id_MOD = int(discord_role_id_MOD)
 discord_channel_id = int(discord_channel_id)
 
 
@@ -45,7 +47,7 @@ async def on_message(message):
         return
 
     #checks if new message starts with '~", if so the bot will run the code below
-    if message.content.startswith("~arc ") and message.channel.id == discord_channel_id and any(i.id == discord_role_id for i in message.author.roles):
+    if message.content.startswith("~arc ") and message.channel.id == discord_channel_id and any(i.id == discord_role_id_MOD or discord_role_id_EXEC for i in message.author.roles):
         #sets variable to whatever message is recieved
         InputTitle = message.content
         #sets the variable to original recived message but without the "~" character

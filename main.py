@@ -39,7 +39,11 @@ async def on_message(message):
     #makes sure the bot doesn't endlessly respond to itself
     if message.author == client.user:
         return
-
+    
+    #ensures that bot or google drive isn't broken when and title begins with a " " or ([space]).
+    if message.content.startswith("~arc  "):
+        return
+    
     #checks if new message starts with '~", if so the bot will run the code below
     if message.content.startswith("~arc ") and message.channel.id == discord_channel_id and any(i.id == discord_role_id_MOD or discord_role_id_EXEC for i in message.author.roles):
         #sets variable to whatever message is recieved
@@ -49,7 +53,7 @@ async def on_message(message):
         #sets the variabel to whomever sent the initial meesage
         AuthorisedExec = message.author
 
-        #Google drive API authenication stuffs (pyDrive) with creditials stored in 'client_secrets.json' file. also the google authenication is put here so that the keys don't expire... i think.
+        #Google drive API authenication stuffs (pyDrive) with creditials stored in 'client_secrets.json' file. also the google authenication is put here so that the keys don't expire... i think. so now it authenticates everytime
         gauth = GoogleAuth()
         gauth.LocalWebserverAuth()
         drive = GoogleDrive(gauth)

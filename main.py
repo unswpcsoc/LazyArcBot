@@ -26,12 +26,6 @@ discord_role_id_EXEC = int(discord_role_id_EXEC)
 discord_role_id_MOD = int(discord_role_id_MOD)
 discord_channel_id = int(discord_channel_id)
 
-
-#Google drive API authenication stuffs (pyDrive) with creditials stored in 'client_secrets.json' file
-gauth = GoogleAuth()
-gauth.LocalWebserverAuth()
-drive = GoogleDrive(gauth)
-
 #Discord API stuffs
 client = discord.Client()
 @client.event
@@ -55,6 +49,11 @@ async def on_message(message):
         #sets the variabel to whomever sent the initial meesage
         AuthorisedExec = message.author
 
+        #Google drive API authenication stuffs (pyDrive) with creditials stored in 'client_secrets.json' file. also the google authenication is put here so that the keys don't expire... i think.
+        gauth = GoogleAuth()
+        gauth.LocalWebserverAuth()
+        drive = GoogleDrive(gauth)
+        
         #creates a folder for the new event, appropriate naming scheme of YYY-MM-DD followed my the event name, saves the folder in the right location
         NewEventFolder = drive.CreateFile({
             'title': folder_naming_scheme + " " + EventName,

@@ -29,12 +29,11 @@ discord_channel_id = int(discord_channel_id)
 #Discord API stuffs
 client = discord.Client()
 @client.event
+@commands.guild_only()
 async def on_ready():
     #tell us when we have a successful login. example: "______#1234"
     print('We have logged in to Discord as {0.user}'.format(client))
-
-@client.event
-@commands.guild_only()
+    
 async def on_message(message):
     #makes sure the bot doesn't endlessly respond to itself
     if message.author == client.user:

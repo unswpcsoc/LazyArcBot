@@ -1,11 +1,14 @@
 #required packages
 import discord
 import datetime
+import time
 import os
+import pandas
 from dotenv import load_dotenv
 from discord.ext import commands
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
+from selenium import webdriver
 
 #all secret keys and google drive fileId are store in the '.env' file
 load_dotenv()
@@ -16,16 +19,19 @@ discord_channel_id = os.getenv('DiscordChannelID_execs')
 team_drive_id_UNSWPCsoc = os.getenv('ShareDriveFileID-UNSW_PCsoc')
 parent_folder_id_21T3 = os.getenv('SubFolderFileID-21T3')
 default_form_file_id = os.getenv('ARCFormFileID-Google_Forms')
+ClubName = os.getenv('ClubName_xPath')
+FirstName = os.getenv('ApplicantFirstName')
+LastName = os.getenv('ApplicantLastName')
+EmailAddress = os.getenv('ApplicantEmail')
+ContactNumber = os.getenv('ApplicantContactNumber')
 
 #sets the varible to a text
 default_form_title = "Arc Online Event Attendance List"
-#sets the varible to whatever date is today
-folder_naming_scheme = datetime.date.today().strftime("%m-%d-%Y")
 #sets the text string from "env" file to a intager numbers so that EXEC and MOD roles will have access
 discord_role_id_EXEC = int(discord_role_id_EXEC)
 discord_role_id_MOD = int(discord_role_id_MOD)
 discord_channel_id = int(discord_channel_id)
-
+                               
 #Discord API stuffs
 client = discord.Client()
 @client.event
@@ -51,6 +57,9 @@ async def on_message(message):
         EventName = InputTitle.replace("~arc ","").upper()
         #sets the variabel to whomever sent the initial meesage
         AuthorisedExec = message.author
+        
+        #sets the varible to whatever date is today
+        folder_naming_scheme = datetime.date.today().strftime("%m-%d-%Y")
 
         #Google drive API authenication stuffs (pyDrive) with creditials stored in 'client_secrets.json' file. also the google authenication is put here so that the keys don't expire... i think. so now it authenticates everytime
         gauth = GoogleAuth()
@@ -97,3 +106,118 @@ async def on_message(message):
         await message.reply(NewEventForm_link)
 client.run(discord_key)
 
+def Sparc ():
+   #get google drive api to download the google sheets as .xlsx and .pdf
+    
+    places = []
+    # open file and read the content in a list
+    with open("NameList.txt", 'r') as filehandle:
+        places = [current_place.rstrip() for current_place in filehandle.readlines()]
+        print(places)
+    matched_indexes = []
+    i = 0
+    length = len(places)
+    while i < length:
+        if ClubName == places[i]:
+            matched_indexes.append(i + 1)
+        i += 1
+    print(f'{ClubName} is present in list at indexes {matched_indexes}')
+    ClubName_xPath = f'//*[@id="field91696630"]/option{matched_indexes}'
+    print(ClubName_xPath)
+    
+    local_arc_files_path = r'C:\Users\ray\Desktop\arc_forms'
+    testPATH = f'{local_arc_files_path} + {folder_naming_scheme} + .xlsx'
+    form_sheet = pandas.read_excel(r'{testPATH}')
+    
+    # PATHa = "C:\\tools\selenium\MicrosoftWebDriver.exe"
+    PATH = "C:\Program Files (x86)\Selenium\chromedriver.exe"
+
+    browser = webdriver.Chrome(PATH)
+    browser.get('https://arclimited.formstack.com/forms/clubfunding_onlineactivities')
+    # web.close()
+
+    print('loading web page in 5 sec')
+    time.sleep(5)
+    print('page should have loaded')
+
+    AgreeConditions = "Yes"
+    conditions = browser.find_element_by_xpath('//*[@id="field91696651_1"]')
+    conditions.click()
+
+    ClubName = "Computer Enthusiasts Society"
+    club = browser.find_element_by_xpath(ClubName_xPath)
+    club.click()
+
+    fname = browser.find_element_by_xpath('//*[@id="field91696631-first"]')
+    fname.send_keys(FirstName)
+
+    lname = browser.find_element_by_xpath('//*[@id="field91696631-last"]')
+    lname.send_keys(LastName)
+
+    email = browser.find_element_by_xpath('//*[@id="field91696632"]')
+    email.send_keys(ApplicantEmail)
+
+    mobile = browser.find_element_by_xpath('//*[@id="field91696633"]')
+    mobile.send_keys(ContactNumber)
+
+    ConductedConjunction = "No"
+    collaboration = browser.find_element_by_xpath('//*[@id="field91696634_2"]')
+    collaboration.click()
+
+    ActvityName = "?"
+    activity = browser.find_element_by_xpath('//*[@id="field91698228"]')
+    activity.send_keys(ActvityName)
+
+    # def StartDate()
+    smonth = web.find_element_by_xpath('//*[@id="field91698232M"]')
+    smonth.send_keys(StartDate)
+    sday = web.find_element_by_xpath('//*[@id="field91698232D"]')
+    sday.click()
+    syear = web.find_element_by_xpath('//*[@id="field91698232Y"]')
+    shour = web.find_element_by_xpath('//*[@id="field91698232H"]')
+    sminute = web.find_element_by_xpath('//*[@id="field91698232I"]')
+    sampm = web.find_element_by_xpath('//*[@id="field91698232A"]')
+
+    EndDate = "?"
+    emonth = web.find_element_by_xpath('//*[@id="field91698235M"]')
+    eday = web.find_element_by_xpath('//*[@id="field91698235D"]')
+    eyear = web.find_element_by_xpath('//*[@id="field91698235Y"]')
+    ehour = web.find_element_by_xpath('//*[@id="field91698235H"]')
+    eminute = web.find_element_by_xpath('//*[@id="field91698235I"]')
+    eampm = web.find_element_by_xpath('//*[@id="field91698235I"]')
+
+    DescriptionActivity = "?"
+    description = web.find_element_by_xpath('//*[@id="field91698239"]')
+    description.send_keys(DescriptionActivity)
+
+    PeopleAttended = "?"
+    people = web.find_element_by_xpath('//*[@id="field91696639"]')
+    people.send_keys(PeopleAttended)
+
+    EvidenceAttendance = "?file?"
+    evidence = web.find_element_by_xpath('//*[@id="field91698387UploadButton"]')
+    evidence.send_keys(os.getcwd(local_arc_files_path + "\\" + folder_naming_scheme + ".pdf"))
+
+    ActivityPhoto = "?file?"
+    photo = web.find_element_by_xpath('//*[@id="field91698320UploadButton"]')
+    photo.send_keys(os.getcwd(local_arc_files_path + "\\" + folder_naming_scheme + ".jpg"))
+    
+    IncomeExpenditure = "No"
+    money = web.find_element_by_xpath('//*[@id="field91698326_2"]')
+    money.send_click()
+
+    NotesComments = "Powered my Lazy Arc Bot AI | @tld8102"
+    notes = web.find_element_by_xpath('//*[@id="field91696649"]')
+    notes.send_keys(NotesComments)
+
+    SubmitForm = "Yes"
+    submit = web.find_element_by_xpath('//*[@id="fsSubmitButton3856301"]')
+    # submit.click()
+
+    Confirmation = web.find_element_by_css_selector('.[class]')
+    print(Confirmation.text)
+    if ((Confirmation.text) == "?"):
+        print("Successfully Submitted")
+    else:
+        print("Script Failed to Submit Form")
+    

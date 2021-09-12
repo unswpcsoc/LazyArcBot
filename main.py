@@ -170,52 +170,52 @@ def Sparc ():
     activity.send_keys(ActvityName)
 
     # def StartDate()
-    smonth = web.find_element_by_xpath('//*[@id="field91698232M"]')
+    smonth = browser.find_element_by_xpath('//*[@id="field91698232M"]')
     smonth.send_keys(StartDate)
-    sday = web.find_element_by_xpath('//*[@id="field91698232D"]')
+    sday = browser.find_element_by_xpath('//*[@id="field91698232D"]')
     sday.click()
-    syear = web.find_element_by_xpath('//*[@id="field91698232Y"]')
-    shour = web.find_element_by_xpath('//*[@id="field91698232H"]')
-    sminute = web.find_element_by_xpath('//*[@id="field91698232I"]')
-    sampm = web.find_element_by_xpath('//*[@id="field91698232A"]')
+    syear = browser.find_element_by_xpath('//*[@id="field91698232Y"]')
+    shour = browser.find_element_by_xpath('//*[@id="field91698232H"]')
+    sminute = browser.find_element_by_xpath('//*[@id="field91698232I"]')
+    sampm = browser.find_element_by_xpath('//*[@id="field91698232A"]')
 
     EndDate = "?"
-    emonth = web.find_element_by_xpath('//*[@id="field91698235M"]')
-    eday = web.find_element_by_xpath('//*[@id="field91698235D"]')
-    eyear = web.find_element_by_xpath('//*[@id="field91698235Y"]')
-    ehour = web.find_element_by_xpath('//*[@id="field91698235H"]')
-    eminute = web.find_element_by_xpath('//*[@id="field91698235I"]')
-    eampm = web.find_element_by_xpath('//*[@id="field91698235I"]')
+    emonth = browser.find_element_by_xpath('//*[@id="field91698235M"]')
+    eday = browser.find_element_by_xpath('//*[@id="field91698235D"]')
+    eyear = browser.find_element_by_xpath('//*[@id="field91698235Y"]')
+    ehour = browser.find_element_by_xpath('//*[@id="field91698235H"]')
+    eminute = browser.find_element_by_xpath('//*[@id="field91698235I"]')
+    eampm = browser.find_element_by_xpath('//*[@id="field91698235I"]')
 
     DescriptionActivity = "?"
-    description = web.find_element_by_xpath('//*[@id="field91698239"]')
+    description = browser.find_element_by_xpath('//*[@id="field91698239"]')
     description.send_keys(DescriptionActivity)
 
     PeopleAttended = "?"
-    people = web.find_element_by_xpath('//*[@id="field91696639"]')
+    people = browser.find_element_by_xpath('//*[@id="field91696639"]')
     people.send_keys(PeopleAttended)
 
     EvidenceAttendance = "?file?"
-    evidence = web.find_element_by_xpath('//*[@id="field91698387UploadButton"]')
+    evidence = browser.find_element_by_xpath('//*[@id="field91698387UploadButton"]')
     evidence.send_keys(os.getcwd(local_arc_files_path + "\\" + folder_naming_scheme + ".pdf"))
 
     ActivityPhoto = "?file?"
-    photo = web.find_element_by_xpath('//*[@id="field91698320UploadButton"]')
+    photo = browser.find_element_by_xpath('//*[@id="field91698320UploadButton"]')
     photo.send_keys(os.getcwd(local_arc_files_path + "\\" + folder_naming_scheme + ".jpg"))
     
     IncomeExpenditure = "No"
-    money = web.find_element_by_xpath('//*[@id="field91698326_2"]')
+    money = browser.find_element_by_xpath('//*[@id="field91698326_2"]')
     money.send_click()
 
     NotesComments = "Powered my Lazy Arc Bot AI | @tld8102"
-    notes = web.find_element_by_xpath('//*[@id="field91696649"]')
+    notes = browser.find_element_by_xpath('//*[@id="field91696649"]')
     notes.send_keys(NotesComments)
 
     SubmitForm = "Yes"
-    submit = web.find_element_by_xpath('//*[@id="fsSubmitButton3856301"]')
+    submit = browser.find_element_by_xpath('//*[@id="fsSubmitButton3856301"]')
     # submit.click()
 
-    Confirmation = web.find_element_by_css_selector('.[class]')
+    Confirmation = browser.find_element_by_css_selector('.[class]')
     print(Confirmation.text)
     if ((Confirmation.text) == "?"):
         print("Successfully Submitted")

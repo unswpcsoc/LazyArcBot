@@ -106,6 +106,7 @@ async def on_message(message):
         await message.reply(NewEventForm_link)
 client.run(discord_key)
 
+#this part is all for the Spac Grants function
 def Sparc ():
    #get google drive api to download the google sheets as .xlsx and .pdf
     

@@ -110,6 +110,13 @@ client.run(discord_key)
 def Sparc ():
    #get google drive api to download the google sheets as .xlsx and .pdf
     
+    local_arc_files_path = r'C:\Users\ray\Desktop\arc_forms'
+    abc123 = r'\'
+    TestPATH = local_arc_files_path + abc123 + folder_naming_scheme
+    BaseFileSource = pandas.read_excel(f'{TestPATH}.xlsx')
+
+    SignOn_time = pandas.DataFrame(data, columns=['Product'])
+    
     places = []
     # open file and read the content in a list
     with open("NameList.txt", 'r') as filehandle:
@@ -125,10 +132,6 @@ def Sparc ():
     print(f'{ClubName} is present in list at indexes {matched_indexes}')
     ClubName_xPath = f'//*[@id="field91696630"]/option{matched_indexes}'
     print(ClubName_xPath)
-    
-    local_arc_files_path = r'C:\Users\ray\Desktop\arc_forms'
-    testPATH = f'{local_arc_files_path} + {folder_naming_scheme} + .xlsx'
-    form_sheet = pandas.read_excel(r'{testPATH}')
     
     # PATHa = "C:\\tools\selenium\MicrosoftWebDriver.exe"
     PATH = "C:\Program Files (x86)\Selenium\chromedriver.exe"
@@ -197,11 +200,11 @@ def Sparc ():
 
     EvidenceAttendance = "?file?"
     evidence = browser.find_element_by_xpath('//*[@id="field91698387UploadButton"]')
-    evidence.send_keys(os.getcwd(local_arc_files_path + "\\" + folder_naming_scheme + ".pdf"))
+    evidence.send_keys(os.getcwd(f'{BaseFileSource}.pdf'))
 
     ActivityPhoto = "?file?"
     photo = browser.find_element_by_xpath('//*[@id="field91698320UploadButton"]')
-    photo.send_keys(os.getcwd(local_arc_files_path + "\\" + folder_naming_scheme + ".jpg"))
+    photo.send_keys(os.getcwd(f'{BaseFileSource}.jpg'))
     
     IncomeExpenditure = "No"
     money = browser.find_element_by_xpath('//*[@id="field91698326_2"]')

@@ -1,4 +1,4 @@
-#required packages
+# required packages
 import discord
 import datetime
 import time
@@ -10,7 +10,7 @@ from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 from selenium import webdriver
 
-#all secret keys and google drive fileId are store in the '.env' file
+# all secret keys and google drive fileId are store in the '.env' file
 load_dotenv()
 discord_key = os.getenv('Discord_BOT-TOKEN')
 discord_role_id_EXEC = os.getenv('DiscordRoleID_EXEC')
@@ -25,48 +25,52 @@ LastName = os.getenv('ApplicantLastName')
 EmailAddress = os.getenv('ApplicantEmail')
 ContactNumber = os.getenv('ApplicantContactNumber')
 
-#sets the varible to a text
+# sets the varible to a text
 default_form_title = "Arc Online Event Attendance List"
-#sets the text string from "env" file to a intager numbers so that EXEC and MOD roles will have access
+# sets the text string from "env" file to a intager numbers so that EXEC and MOD roles will have access
 discord_role_id_EXEC = int(discord_role_id_EXEC)
 discord_role_id_MOD = int(discord_role_id_MOD)
 discord_channel_id = int(discord_channel_id)
-                               
-#Discord API stuffs
+
+# Discord API stuffs
 client = discord.Client()
+
+
 @client.event
 @commands.guild_only()
 async def on_ready():
-    #tell us when we have a successful login. example: "______#1234"
+    # tell us when we have a successful login. example: "______#1234"
     print('We have logged in to Discord as {0.user}'.format(client))
-    
+
+
 async def on_message(message):
-    #makes sure the bot doesn't endlessly respond to itself
+    # makes sure the bot doesn't endlessly respond to itself
     if message.author == client.user:
         return
-    
-    #ensures that bot or google drive isn't broken when and title begins with a " " or ([space]).
+
+    # ensures that bot or google drive isn't broken when and title begins with a " " or ([space]).
     if message.content.startswith("~arc  "):
         return
-    
-    #checks if new message starts with '~", if so the bot will run the code below
-    if message.content.startswith("~arc ") and message.channel.id == discord_channel_id and any(i.id == discord_role_id_MOD or discord_role_id_EXEC for i in message.author.roles):
-        #sets variable to whatever message is recieved
+
+    # checks if new message starts with '~", if so the bot will run the code below
+    if message.content.startswith("~arc ") and message.channel.id == discord_channel_id and any(
+            i.id == discord_role_id_MOD or discord_role_id_EXEC for i in message.author.roles):
+        # sets variable to whatever message is recieved
         InputTitle = message.content
-        #sets the variable to original recived message but without the "~" character
-        EventName = InputTitle.replace("~arc ","").upper()
-        #sets the variabel to whomever sent the initial meesage
+        # sets the variable to original recived message but without the "~" character
+        EventName = InputTitle.replace("~arc ", "").upper()
+        # sets the variabel to whomever sent the initial meesage
         AuthorisedExec = message.author
-        
-        #sets the varible to whatever date is today
+
+        # sets the varible to whatever date is today
         folder_naming_scheme = datetime.date.today().strftime("%m-%d-%Y")
 
-        #Google drive API authenication stuffs (pyDrive) with creditials stored in 'client_secrets.json' file. also the google authenication is put here so that the keys don't expire... i think. so now it authenticates everytime
+        # Google drive API authenication stuffs (pyDrive) with creditials stored in 'client_secrets.json' file. also the google authenication is put here so that the keys don't expire... i think. so now it authenticates everytime
         gauth = GoogleAuth()
         gauth.LocalWebserverAuth()
         drive = GoogleDrive(gauth)
-        
-        #creates a folder for the new event, appropriate naming scheme of YYY-MM-DD followed my the event name, saves the folder in the right location
+
+        # creates a folder for the new event, appropriate naming scheme of YYY-MM-DD followed my the event name, saves the folder in the right location
         NewEventFolder = drive.CreateFile({
             'title': folder_naming_scheme + " " + EventName,
             'mimeType': "application/vnd.google-apps.folder",
@@ -79,10 +83,10 @@ async def on_message(message):
         NewEventFolder.Upload()
 
         print("New Folder:  " + 'title: %s, id: %s' % (NewEventFolder['title'], NewEventFolder['id']))
-        #sets the variable to whatever the newly created folder's ID is
+        # sets the variable to whatever the newly created folder's ID is
         NewEventFolder_id = NewEventFolder['id']
 
-        #copies the template google forms file and saves it to the newly created event folder
+        # copies the template google forms file and saves it to the newly created event folder
         NewEventForm = drive.auth.service.files().copy(
             fileId=default_form_file_id,
             body={
@@ -94,22 +98,25 @@ async def on_message(message):
             }
         ).execute()
 
-        print("New Form:    " + 'title: %s, id: %s' % (NewEventForm['title'],NewEventForm['id']))
-        #sets the varible to whatever the newly copied form's ID is
+        print("New Form:    " + 'title: %s, id: %s' % (NewEventForm['title'], NewEventForm['id']))
+        # sets the varible to whatever the newly copied form's ID is
         NewEventForm_id = NewEventForm['id']
-        #sets the variable to a text that is formated correctly to work as a URL
+        # sets the variable to a text that is formated correctly to work as a URL
         NewEventForm_link = "https://docs.google.com/forms/d/" + NewEventForm_id
         print(AuthorisedExec)
         print(NewEventForm_link)
 
-        #replys back to the orginal message with the form's URL
+        # replys back to the orginal message with the form's URL
         await message.reply(NewEventForm_link)
+
+
 client.run(discord_key)
 
-#this part is all for the Spac Grants function
-def Sparc ():
-   #get google drive api to download the google sheets as .xlsx and .pdf
-    
+
+# this part is all for the Spac Grants function
+def Sparc():
+    # get google drive api to download the google sheets as .xlsx and .pdf
+
     places = []
     # open file and read the content in a list
     with open("NameList.txt", 'r') as filehandle:
@@ -125,11 +132,11 @@ def Sparc ():
     print(f'{ClubName} is present in list at indexes {matched_indexes}')
     ClubName_xPath = f'//*[@id="field91696630"]/option{matched_indexes}'
     print(ClubName_xPath)
-    
+
     local_arc_files_path = r'C:\Users\ray\Desktop\arc_forms'
     testPATH = f'{local_arc_files_path} + {folder_naming_scheme} + .xlsx'
     form_sheet = pandas.read_excel(r'{testPATH}')
-    
+
     # PATHa = "C:\\tools\selenium\MicrosoftWebDriver.exe"
     PATH = "C:\Program Files (x86)\Selenium\chromedriver.exe"
 
@@ -202,7 +209,7 @@ def Sparc ():
     ActivityPhoto = "?file?"
     photo = browser.find_element_by_xpath('//*[@id="field91698320UploadButton"]')
     photo.send_keys(os.getcwd(local_arc_files_path + "\\" + folder_naming_scheme + ".jpg"))
-    
+
     IncomeExpenditure = "No"
     money = browser.find_element_by_xpath('//*[@id="field91698326_2"]')
     money.send_click()
@@ -221,4 +228,3 @@ def Sparc ():
         print("Successfully Submitted")
     else:
         print("Script Failed to Submit Form")
-    
